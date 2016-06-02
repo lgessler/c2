@@ -1,11 +1,11 @@
 module Read where
 
+import AST
+
 import Control.Monad
 import Control.Applicative
 import Data.List
-import Compiler
 import Control.Monad.State
-import AST
 
 
 formatcontent::[String] -> AST
@@ -36,8 +36,8 @@ formatMPAttr = do
   let attributeName = text !! 1
       typeName      = text !! 2 in
       put (drop 3 text) >> case head text of 
-	   "initializer"          -> return . Attr attributeName typeName =<< formatExpr
-	   "no_initializer"       -> return $ Attr_NI attributeName typeName
+     "initializer"          -> return . Attr attributeName typeName =<< formatExpr
+     "no_initializer"       -> return $ Attr_NI attributeName typeName
 
 formatImpMap :: State [String] ImpMap
 formatImpMap = modify tail >> ImpMap <$> formatUnnumberedList formatClassImp
@@ -116,7 +116,7 @@ formatExpr = do (n:t:xs) <- get
 
 formatAnExpr:: State [String] AnExpr
 formatAnExpr = do (x:_) <- get
-		  modify tail
+                  modify tail
                   f x where
   f x
     | x == "assign"                                  = liftM2 AssignmentEx formatIdentifier formatExpr
@@ -140,14 +140,14 @@ formatDispatch::String -> State [String] AnExpr
 formatDispatch x 
         | x == "self_dispatch"       = liftM2 (DispatchEx Nothing Nothing) formatIdentifier $ formatUnnumberedList formatExpr
         | x == "dynamic_dispatch"    = do mthd_expr2 <- formatExpr
-					  method_identifier2 <- formatIdentifier
-					  expr_list2 <- formatUnnumberedList formatExpr
-					  return$ DispatchEx (Just mthd_expr2) Nothing method_identifier2 expr_list2
+                                          method_identifier2 <- formatIdentifier
+                                          expr_list2 <- formatUnnumberedList formatExpr
+                                          return$ DispatchEx (Just mthd_expr2) Nothing method_identifier2 expr_list2
         | x == "static_dispatch"     = do mthd_expr2 <- formatExpr
-					  method_type <- formatType
-					  method_identifier3 <- formatIdentifier
-					  expr_list3 <- formatUnnumberedList formatExpr
-					  return$ DispatchEx (Just mthd_expr2) (Just method_type) method_identifier3 expr_list3
+                                          method_type <- formatType
+                                          method_identifier3 <- formatIdentifier
+                                          expr_list3 <- formatUnnumberedList formatExpr
+                                          return$ DispatchEx (Just mthd_expr2) (Just method_type) method_identifier3 expr_list3
 
 triple :: a -> b -> c -> (a,b,c)
 triple a b c = (a,b,c)
