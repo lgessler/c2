@@ -42,7 +42,7 @@ data Type = Type Integer String
 data Feature = AttributeNoInit Identifier Type | AttributeInit Identifier Type Expr | Method Identifier [(Identifier, Type)] Type Expr
         deriving (Show, Eq)
 
-data BinOp = Add | Sub | Mul | Div | GDiv deriving (Show, Eq)
+data BinOp = Add | Sub | Mul | Div deriving (Show, Eq)
 data CmpOp = Le | Lt | Eq deriving (Show, Eq)
 data UnOp  = Not | Neg deriving (Show, Eq)
 
